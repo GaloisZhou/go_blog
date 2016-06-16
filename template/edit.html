@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit {{.Title}}</title>
+    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.css">
+</head>
+
+<body>
+    <h1>Editing {{.Title}}</h1>
+    <form action="/save/{{.Title}}" method="POST">
+        <div class="edit">
+            <textarea name="content" rows="20" cols="80">{{printf "%s" .Content}}</textarea>
+            <br>
+            <button class="btn">Save</button>
+            <button class="btn btn-cancle" onclick="javascript: location.href='/view/{{.Title}}'">Cancle</button>
+        </div>
+    </form>
+</body>
+
+</html>

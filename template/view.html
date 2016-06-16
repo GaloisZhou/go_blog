@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.css">
+</head>
+
+<body>
+    <header>
+    <a href="/list">首页</a>
+    </header>
+    <div class="content">
+        <h1>{{.Title}}</h1>
+        <p>[<a href="/edit/{{.Title}}">EDIT</a>]</p>
+        <div class="text-content">{{printf "%s" .Content}}</div>
+    </div>
+</body>
+
+</html>

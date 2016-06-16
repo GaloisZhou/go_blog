@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>List</title>
+    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.css">
+</head>
+
+<body>
+    <h1>List</h1>
+    <ul>
+        {{range .}}
+        <li>
+            <a href="/view/{{.Title}}">{{.Title}}</a>
+        </li>
+        {{end}}
+    </ul>
+</body>
+
+</html>
