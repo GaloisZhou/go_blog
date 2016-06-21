@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/dickeyxxx/githubmarkdown"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -11,21 +12,31 @@ import (
 )
 
 type Page struct {
-	Title   string
-	Content []byte
+	Title      string
+	Content    []byte
+	ContentStr template.HTML
 }
 
 func (p *Page) save() error {
-	filename := "blog_data/" + p.Title + ".txt"
-	log.Println("save file: ", filename)
-	return ioutil.WriteFile(filename, p.Content, 0600)
+	err := ioutil.WriteFile("blog_data/md/"+p.Title+".md", p.Content, 0600)
+	if err != nil {
+		return err
+	}
+
+	content, mdErr := githubmarkdown.Parse(string(p.Content))
+	if mdErr != nil {
+		return mdErr
+	}
+
+	return ioutil.WriteFile("blog_data/txt/"+p.Title+".txt", []byte(content), 0600)
 }
 
 func main() {
 	dir, _ := os.Stat("blog_data")
 	if dir == nil || !dir.IsDir() {
 		log.Println("The director 'blog_data' is not exists. Create it now.")
-		os.Mkdir("blog_data", 0777)
+		os.MkdirAll("blog_data/md", 0777)
+		os.MkdirAll("blog_data/txt", 0777)
 	}
 
 	// handle the list page
@@ -46,7 +57,7 @@ func main() {
 }
 
 func listHandle(w http.ResponseWriter, r *http.Request) {
-	files, err := ioutil.ReadDir("blog_data")
+	files, err := ioutil.ReadDir("blog_data/md")
 	if err != nil {
 		log.Println("empty list.")
 		renderTemplate(w, "list", nil)
@@ -64,19 +75,23 @@ func listHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func viewHandle(w http.ResponseWriter, r *http.Request) {
+	log.Println("view Handle")
 	title := r.URL.Path[len("/view/"):]
-	p, err := loadPage(title)
+	p, err := loadPage(title, "txt")
 	if err != nil {
 		log.Println("Article is not exist, create it.")
 		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
 		return
 	}
+	// transform string/byte[] to template.HTML，
+	// the content will show as html not string (t.Execute(w, p))
+	p.ContentStr = template.HTML(string(p.Content))
 	renderTemplate(w, "view", p)
 }
 
 func editHandle(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/edit/"):]
-	p, err := loadPage(title)
+	p, err := loadPage(title, "md")
 	if err != nil {
 		p = &Page{Title: title}
 	}
@@ -85,8 +100,9 @@ func editHandle(w http.ResponseWriter, r *http.Request) {
 
 func saveHandle(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/save/"):]
-	content := r.FormValue("content")
-	p := &Page{Title: title, Content: []byte(content)}
+	content := []byte(r.FormValue("content"))
+
+	p := &Page{Title: title, Content: content}
 	err := p.save()
 	if err != nil {
 		fmt.Println(err)
@@ -116,8 +132,9 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s\n", content)
 }
 
-func loadPage(title string) (*Page, error) {
-	filename := "blog_data/" + title + ".txt"
+func loadPage(title, extension string) (*Page, error) {
+	filename := "blog_data/" + extension + "/" + title + "." + extension
+	log.Println("filename:", filename)
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err

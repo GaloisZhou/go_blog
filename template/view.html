@@ -5,17 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{.Title}}</title>
-    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.css">
+    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.min.css">
+    <link rel="stylesheet" href="/public/style/css/markdown.min.css">
 </head>
 
 <body>
-    <header>
-    <a href="/list">Home Page</a>
-    </header>
-    <div class="content">
-        <h1>{{.Title}}</h1>
-        <p>[<a href="/edit/{{.Title}}">EDIT</a>]</p>
-        <div class="text-content">{{printf "%s" .Content}}</div>
+    <div class="markdown-body">
+        <header>
+            <a href="/list">Home Page</a>
+        </header>
+        <div class="content">
+            <h1>{{.Title}}</h1>
+            <p>[<a href="/edit/{{.Title}}">EDIT</a>]</p>
+            <div class="text-content">{{.ContentStr}}</div>
+        </div>
     </div>
 </body>
 

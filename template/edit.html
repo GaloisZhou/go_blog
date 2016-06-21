@@ -5,19 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Edit {{.Title}}</title>
-    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.css">
+    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.min.css">
+    <link rel="stylesheet" href="/public/style/css/markdown.min.css">
 </head>
 
 <body>
-    <h1>Editing {{.Title}}</h1>
-    <form action="/save/{{.Title}}" method="POST">
-        <div class="edit">
-            <textarea name="content" rows="20" cols="80">{{printf "%s" .Content}}</textarea>
-            <br>
-            <button class="btn">Save</button>
-            <button class="btn btn-cancle" onclick="javascript: location.href='/view/{{.Title}}'">Cancle</button>
-        </div>
-    </form>
+    <div class="markdown-body content">
+        <h1>Editing {{.Title}}</h1>
+        <form action="/save/{{.Title}}" method="POST">
+            <div class="edit">
+                <textarea name="content" rows="20">{{printf "%s" .Content}}</textarea>
+                <br>
+                <button class="btn">Save</button>
+                <button class="btn btn-cancle" onclick="javascript: location.href='/view/{{.Title}}'">Cancle</button>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>

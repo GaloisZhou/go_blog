@@ -5,18 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>List</title>
-    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.css">
+    <link rel="stylesheet" type="text/css" href="/public/style/css/blog.min.css">
+    <link rel="stylesheet" href="/public/style/css/markdown.min.css">
 </head>
 
 <body>
-    <h1>List</h1>
-    <ul>
-        {{range .}}
-        <li>
-            <a href="/view/{{.Title}}">{{.Title}}</a>
-        </li>
-        {{end}}
-    </ul>
+    <div class="markdown-body content">
+
+        <h1>List</h1>
+        <ul>
+            {{range .}}
+            <li>
+                <a href="/view/{{.Title}}">{{.Title}}</a>
+            </li>
+            {{end}}
+        </ul>
+    </div>
 </body>
 
 </html>
