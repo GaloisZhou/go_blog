@@ -1,5 +1,7 @@
 ## Just a demo about go http server
 
+[demo](http://go-blog.galoiszhou.com/list)
+
 1. first add the dir go_blog to the environment variables $GOPATH
 
 2. run it
